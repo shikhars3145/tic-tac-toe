@@ -93,3 +93,44 @@ function checkWin()
 
 startGame();
 
+//AI CODE//
+/*
+function AI_Turn()
+{
+    let blanks = [];
+    cellElements.forEach(element => {
+        if(!(element.classList.contains(X_CLASS)||element.classList.contains(CIRCLE_CLASS)))
+        {
+            element.classList.add(currentClass);
+            let score = minimax();
+            element.classList.remove(currentClass);
+        }
+    });
+    console.log(blanks)
+}
+
+
+function minimax(cell, blanks ,maxplayer)
+{
+    cell.classList.add(currentClass);
+    if(checkWin())
+    {
+        cell.classList.remove(currentClass);
+        return 1;
+    }
+    
+    
+    if(draw())
+    {
+        cell.classList.remove(currentClass);
+        return 0;
+    }
+
+
+    if(maxplayer)
+    {
+        maxScore = -Infinity;
+
+    }
+}
+*/
