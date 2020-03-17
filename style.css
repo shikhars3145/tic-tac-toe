@@ -1,0 +1,140 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+:root {
+    --cell-size: 100px;
+    --mark-size: calc(var(--cell-size)*.9);
+}
+
+body{
+    margin: 0;
+}
+
+.board{
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(3, auto);
+}
+
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 1px solid #000;
+    display: flex;                  /*helps display before after*/
+    justify-content: center;        /*helps display before after*/
+    align-items: center;            /*helps display before after*/
+    position: relative;             /*helps start before and after at same point helping them overlap the way we want*/
+    cursor: pointer;
+}
+
+.cell:nth-child(1),
+.cell:nth-child(2),
+.cell:nth-child(3) {
+    border-top: none;
+} 
+.cell:nth-child(3n+1) {
+    border-left: none;
+}
+.cell:nth-child(3n+3){
+    border-right: none;
+}
+
+.cell:nth-child(7),
+.cell:nth-child(8),
+.cell:nth-child(9) {
+    border-bottom: none;
+} 
+
+.cell.x::before,
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after{
+    content: '';
+    background-color: #000;
+    width: calc(var(--mark-size)* 0.15);
+    height: var(--mark-size);
+}
+
+
+.cell.x::before,
+.board.x .cell:not(.x):not(.circle):hover::before{
+    transform: rotate(-45deg);
+}
+
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::after{
+    transform: rotate(45deg);
+    position: absolute;
+}
+
+.cell.circle::before,
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after{
+    content: '';
+    background-color: #000;
+    width: var(--mark-size);
+    height: var(--mark-size);
+    position: absolute;
+    border-radius: 50%;
+}
+
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::after{
+    width: calc(var(--mark-size)* 0.7);
+    height: calc(var(--mark-size)* 0.7);
+    background-color: #fff;
+}
+
+
+.cell.x,
+.cell.circle{
+    cursor: not-allowed;
+}
+
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after,
+.board.circle .cell:not(.x):not(.circle):hover::before{
+    background-color: lightgrey;
+}
+
+.winning-message{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.9);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 56px;
+}
+.winning-message #restartButton{
+    font-size: 1em;
+    background-color: black;
+    border: 2px solid white;
+    color: white;
+}
+
+
+.winning-message #restartButton:hover{
+    font-size: 1em;
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+    
+}
+
+.winning-message.show{
+    display: flex;
+}
