@@ -20,6 +20,8 @@ function startGame()
     })
     circleTurn = true;
     swapTurns();
+    AI();
+    //human();
 }
 
 document.querySelector('#restartButton').addEventListener('click',startGame)
@@ -41,17 +43,21 @@ function handleClick(e){
     currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
     placeMark(cell, currentClass);
     //check for win
+
     if(draw()){
         document.querySelector('[data-winning-message-text]').textContent = 'Draw!';
         document.querySelector('.winning-message').classList.add('show')
     }
-    if(checkWin()){
-        document.querySelector('[data-winning-message-text]').textContent = `${ circleTurn? 'O\'s' :'X\'s'} Won!`;
+    else if(checkWin()===-10){console.log("hello");
+
+        document.querySelector('[data-winning-message-text]').textContent = `O\'s Won!`;
         document.querySelector('.winning-message').classList.add('show')
     }
     //check for draw
     //switch player
+    else{circleTurn = true;
     swapTurns();
+    AI();}
 }
 
 function placeMark(cell, currentClass)
@@ -86,53 +92,124 @@ function draw()
 
 function checkWin()
 {
-    return winList.some(triplet=>{
+    if(winList.some(triplet=>{
        return triplet.every(index=>{
-            return cellElements[index].classList.contains(currentClass);
+            return (cellElements[index].classList.contains(X_CLASS));
         })
-    })
+    }))
+    {
+        return 10;
+    }
+
+    
+    if(winList.some(triplet=>{
+        return triplet.every(index=>{
+             return (cellElements[index].classList.contains(CIRCLE_CLASS));
+         })
+     }))
+     {
+         return -10;
+     }
+
+    return 0;
+    
 }
 
 startGame();
 
-//AI CODE//
-/*
-function AI_Turn()
+function AI()
 {
-    let blanks = [];
-    cellElements.forEach(element => {
-        if(!(element.classList.contains(X_CLASS)||element.classList.contains(CIRCLE_CLASS)))
+  circleTurn = false;
+  board.classList.add(X_CLASS);
+  board.classList.remove(CIRCLE_CLASS);
+  let bestScore = -Infinity;
+  let nextMove;
+  [...cellElements].forEach(Element =>{
+      if (!Element.classList.contains(X_CLASS)&&!Element.classList.contains(CIRCLE_CLASS))
+      {
+        Element.classList.add(X_CLASS);
+        let score = miniMax(false);
+        Element.classList.remove(X_CLASS);
+        if(score>bestScore)
         {
-            element.classList.add(currentClass);
-            let score = minimax();
-            element.classList.remove(currentClass);
+            bestScore = score;
+            nextMove = Element;
         }
-    });
-    console.log(blanks)
+      }
+  })
+  nextMove.classList.add(X_CLASS);
+  if(draw()){
+    document.querySelector('[data-winning-message-text]').textContent = 'Draw!';
+    document.querySelector('.winning-message').classList.add('show')
+  }
+  if(checkWin()){
+    document.querySelector('[data-winning-message-text]').textContent = `X's Won!`;
+    document.querySelector('.winning-message').classList.add('show')
+  }
+  human();
 }
 
 
-function minimax(cell, blanks ,maxplayer)
+function miniMax(maxPlayer)
 {
-    cell.classList.add(currentClass);
-    if(checkWin())
+    
+
+
+    if(checkWin()===10)
     {
-        cell.classList.remove(currentClass);
         return 1;
     }
-    
-    
+    if(checkWin()===-10)
+    {
+        return -1;
+    }
     if(draw())
     {
-        cell.classList.remove(currentClass);
         return 0;
     }
 
-
-    if(maxplayer)
+    if(maxPlayer)
     {
-        maxScore = -Infinity;
+        let bestScore = -Infinity;
+        [...cellElements].forEach(Element =>{
+            if (!Element.classList.contains(X_CLASS)&&!Element.classList.contains(CIRCLE_CLASS))
+            {
+              Element.classList.add(X_CLASS);
+              let score = miniMax(false);
+              Element.classList.remove(X_CLASS);
+              if(score>bestScore)
+              {
+                  bestScore = score;
+              }
+            }
+        });
+        return bestScore;
+    }
 
+
+    if(!maxPlayer)
+    {
+        let bestScore = Infinity;
+        [...cellElements].forEach(Element =>{
+            if (!Element.classList.contains(X_CLASS)&&!Element.classList.contains(CIRCLE_CLASS))
+            {
+              Element.classList.add(CIRCLE_CLASS);
+              let score = miniMax(true);
+              Element.classList.remove(CIRCLE_CLASS);
+              if(score<bestScore)
+              {
+                  bestScore = score;
+              }
+            }
+        });
+        return bestScore;
     }
 }
-*/
+
+
+function human()
+{   
+    circleTurn = true;
+    board.classList.remove(X_CLASS);
+    board.classList.add(CIRCLE_CLASS);
+}
