@@ -18,6 +18,8 @@ function startGame()
         cell.removeEventListener('click',handleClick);
         cell.addEventListener('click', handleClick, {once: true})
     })
+    circleTurn = true;
+    swapTurns();
 }
 
 document.querySelector('#restartButton').addEventListener('click',startGame)
