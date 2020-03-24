@@ -41,9 +41,9 @@ function handleClick(e){
     //place marker
     const cell = e.target;
     currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
-    if(!cell.classList.contains(X_CLASS)&&!cell.classList.contains(CIRCLE_CLASS))
-    {placeMark(cell, currentClass);
-    }//check for win
+    
+    placeMark(cell, currentClass);
+    //check for win
 
     if(draw()){
         document.querySelector('[data-winning-message-text]').textContent = 'Draw!';
@@ -139,6 +139,7 @@ function AI()
       }
   })
   nextMove.classList.add(X_CLASS);
+  nextMove.removeEventListener('click',handleClick);
   if(draw()){
     document.querySelector('[data-winning-message-text]').textContent = 'Draw!';
     document.querySelector('.winning-message').classList.add('show')
