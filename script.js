@@ -41,8 +41,9 @@ function handleClick(e){
     //place marker
     const cell = e.target;
     currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
-    placeMark(cell, currentClass);
-    //check for win
+    if(!cell.classList.contains(X_CLASS)&&!cell.classList.contains(CIRCLE_CLASS))
+    {placeMark(cell, currentClass);
+    }//check for win
 
     if(draw()){
         document.querySelector('[data-winning-message-text]').textContent = 'Draw!';
