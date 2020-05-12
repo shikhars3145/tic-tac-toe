@@ -24,9 +24,9 @@ function startGame(players = 2, first = "H") {
   human_first = first == "H" ? true : false;
   single_player = players == 2 ? false : true;
   if (!single_player) human_first = true;
-  console.log(
-    `single player:${single_player}, ${players}, human first: ${human_first}, ${first}`
-  );
+  //    console.log(
+  //     `single player:${single_player}, ${players}, human first: ${human_first}, ${first}`
+  //   );
   document.querySelector("[data-winning-message-text]").textContent = "";
   document.querySelector(".winning-message").classList.remove("show");
   cellElements.forEach((cell) => {
@@ -151,7 +151,7 @@ function AI() {
       !Element.classList.contains(CIRCLE_CLASS)
     ) {
       Element.classList.add(X_CLASS);
-      let score = miniMax(false);
+      let score = miniMax(false, -20, 20);
       Element.classList.remove(X_CLASS);
       if (score > bestScore) {
         bestScore = score;
@@ -174,7 +174,7 @@ function AI() {
   human();
 }
 
-function miniMax(maxPlayer) {
+function miniMax(maxPlayer, alpha, beta) {
   if (checkWin() === 10) {
     return 1;
   }
@@ -187,16 +187,22 @@ function miniMax(maxPlayer) {
 
   if (maxPlayer) {
     let bestScore = -Infinity;
-    [...cellElements].forEach((Element) => {
+    [...cellElements].some((Element) => {
       if (
         !Element.classList.contains(X_CLASS) &&
         !Element.classList.contains(CIRCLE_CLASS)
       ) {
         Element.classList.add(X_CLASS);
-        let score = miniMax(false);
+        let score = miniMax(false, alpha, beta);
         Element.classList.remove(X_CLASS);
         if (score > bestScore) {
           bestScore = score;
+        }
+        if (score > alpha) alpha = score;
+
+        if (beta <= alpha) {
+          // console.log("pruned");
+          return true;
         }
       }
     });
@@ -205,16 +211,22 @@ function miniMax(maxPlayer) {
 
   if (!maxPlayer) {
     let bestScore = Infinity;
-    [...cellElements].forEach((Element) => {
+    [...cellElements].some((Element) => {
       if (
         !Element.classList.contains(X_CLASS) &&
         !Element.classList.contains(CIRCLE_CLASS)
       ) {
         Element.classList.add(CIRCLE_CLASS);
-        let score = miniMax(true);
+        let score = miniMax(true, alpha, beta);
         Element.classList.remove(CIRCLE_CLASS);
         if (score < bestScore) {
           bestScore = score;
+        }
+        if (score < beta) beta = score;
+
+        if (beta <= alpha) {
+          // console.log("pruned");
+          return true;
         }
       }
     });

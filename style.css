@@ -118,17 +118,18 @@ body {
   color: white;
   font-size: 56px;
 }
-.winning-message #restartButton {
+.winning-message button {
   font-size: 0.7em;
   background-color: black;
   border: 2px solid white;
   color: white;
 }
 
-.winning-message #restartButton:hover {
+.winning-message button:hover {
   background-color: white;
   border: 2px solid black;
   color: black;
+  cursor: pointer;
 }
 
 .winning-message.show {
